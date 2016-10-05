@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.4
+
 from pathlib import Path
 import argparse
 from Section import Section
@@ -38,15 +39,23 @@ section_path = handin_path / "Section{:03d}".format(section_number)
 students = Students()
 students.get_all_students_in_section(section_path)
 
-grading_options = ["Grade all students in your Section", "Grade ungraded projects", "Grade one student"]
-option = "bangbang"
-while option != "x":
-    option = print_menu(grading_options, "231 Grading Script")
-    if option == "1":
-        students.grade_all_students(project_number)
-    elif option == "2":
-        students.grade_all_students(project_number, skip_graded=True)
-    elif option == "3":
-        # TODO: Implement single grading
-        0
-print("c ya later")
+def main():
+    grading_options = ["Grade all students in your Section", "Grade ungraded projects", "Grade one student"]
+    option = "bangbang"
+    while option != "x":
+        option = print_menu(grading_options, "231 Grading Script")
+        if option == "1":
+            students.grade_all_students(project_number)
+        elif option == "2":
+            students.grade_all_students(project_number, skip_graded=True)
+        elif option == "3":
+            netid = input("What is the netid?: ")
+            try:
+                students.grade_one_student(netid, project_number)
+            except IndexError as e:
+                print(str(e))
+    print("c ya later")
+
+# Support packaging, this is the programs entry point
+if __name__ == "__main__":
+    main()
