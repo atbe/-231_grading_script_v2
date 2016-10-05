@@ -6,7 +6,8 @@ class Students:
     """
     Models a collection of Student objects.
 
-    Attributes:
+    Attributes
+    ----------
     students : list<Student>
         List of all the student objects in this collection.
     """
@@ -55,8 +56,10 @@ class Students:
         """
         Support indexing []
 
-        Raises:
-            IndexError: Students request was out of range.
+        Raises
+        ------
+        IndexError
+            Students request was out of range.
         """
         if key > len(self.students) - 1:
             raise IndexError("Index out of range")
@@ -74,8 +77,10 @@ class Students:
         project_number : int
             The project to be graded.
 
-        Raises:
-            IndexError: Student is not found.
+        Raises
+        ------
+        IndexError
+            Student is not found.
         """
         options = ["Open all the files", "Open the scoresheet"]
         student_possible_matches = [student for student in self.students if student.netid == netid]

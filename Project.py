@@ -8,7 +8,7 @@ class Project:
     """
     Used to model Project objects.
 
-    Attributes:
+    Attributes
     -----------
     project_path : Path
         Used to indicate the path of the project folder.
@@ -16,10 +16,10 @@ class Project:
     number : int
         Project number.
 
-    py_paths : List<Path>
+    py_paths : list<Path>
         List of Paths of all the .py files for a given project.
 
-    all_file_paths : List<Path>
+    all_file_paths : list<Path>
         List of paths of all the files for a given project.
 
     is-graded : bool
