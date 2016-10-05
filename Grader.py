@@ -24,6 +24,9 @@ if args["section"] is not None:
     section_number = args["section"]
 if args["project"] is not None:
     project_number = args["project"]
+else:
+    project_number = None
+
 # Handin and section path objects, ye
 printd("Args = ", args)
 handin_path = Path(args["path"])
@@ -42,7 +45,7 @@ while option != "x":
     if option == "1":
         students.grade_all_students(project_number)
     elif option == "2":
-        students.grade_ungraded_students(project_number)
+        students.grade_all_students(project_number, skip_graded=True)
     elif option == "3":
         # TODO: Implement single grading
         0
