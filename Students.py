@@ -58,6 +58,7 @@ class Students:
                 option = print_menu(options, "Project Grading")
                 if option == "x":
                     print("Returning to main menu.")
+                    return
                 elif option == "1":
                     student.open_files(project_number)
                 elif option == "2":

@@ -30,7 +30,6 @@ handin_path = Path(args["path"])
 
 # Create Section object
 section_path = handin_path / "Section{:03d}".format(section_number)
-section = Section(section_path, section_number)
 
 # Create a students object and populate it with students
 students = Students()
