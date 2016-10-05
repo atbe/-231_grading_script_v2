@@ -16,13 +16,23 @@ class Students:
 
     def add_student(self, student):
         """
-        Add student to the students collection
+        Add student to the students collection.
+
+        Parameters
+        ----------
+        student : Student
+            The student to be added to the collection.
         """
         self.students.append(student)
 
     def get_all_students_in_section(self, section_path):
         """
         Populates the students list with Student objects found in a sections path.
+
+        Parameters
+        ----------
+        section_path : Path
+            Path to the section to be graded.
         """
         for student_path in section_path.iterdir():
             if student_path.is_dir():
@@ -32,7 +42,7 @@ class Students:
 
     def __iter__(self):
         """
-        Support iterating over the students list
+        Support iterating over the students list.
         """
         for student in self.students:
             yield student
@@ -40,6 +50,9 @@ class Students:
     def __getitem__(self, key):
         """
         Support indexing []
+
+        Raises:
+            IndexError: Students request was out of range.
         """
         if key > len(self.students) - 1:
             raise IndexError("Index out of range")
@@ -49,6 +62,16 @@ class Students:
     def grade_one_student(self, netid, project_number):
         """
         Used to grade a single student.
+
+        Parameters
+        ----------
+        netid : string
+            The students netid.
+        project_number : int
+            The project to be graded.
+
+        Raises:
+            IndexError: Student is not found.
         """
         options = ["Open all the files", "Open the scoresheet"]
         student_possible_matches = [student for student in self.students if student.netid == netid]
@@ -74,7 +97,14 @@ class Students:
     def grade_all_students(self, project_number, skip_graded=False):
         """
         Grades all students.
-        Supports skipping of students who are already graded
+        Supports skipping of students who are already graded.
+
+        Parameters
+        ----------
+        project_number : int
+            Project to be graded.
+        skip_graded : bool = False
+            If True, students with a .graded file in their directory will be skipped.
         """
         options = ["Open all the files", "Open the scoresheet", "Grade Previous Student", "Grade Next Student"]
         current_student_index = 0
