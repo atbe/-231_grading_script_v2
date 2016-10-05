@@ -5,6 +5,10 @@ from Tools import print_menu
 class Students:
     """
     Models a collection of Student objects.
+
+    Attributes:
+    students : list<Student>
+        List of all the student objects in this collection.
     """
 
     def __init__(self):
