@@ -1,4 +1,8 @@
 import re
+import subprocess
+
+# for testing purposes only.
+EDITOR="gedit"
 
 class Project:
     """
@@ -43,6 +47,19 @@ class Project:
         Checks if a project is graded.
         """
         return (self.project_path / ".graded").exists()
+
+    def open_scoresheet(self):
+        subprocess.Popen([EDITOR, str(self.scoresheet_path)], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+    def open_files(self):
+        # TODO: Implement checking for when project does not exist
+
+        input("Press enter to open the files in {}.".format(EDITOR))
+        for path in self.all_file_paths:
+            # print("Project graded = ", project.is_graded)
+            print("Opening: ", str(path))
+
+            subprocess.Popen([EDITOR, str(path)], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
     def get_scoresheet(self):
         score_file_paths = list(self.project_path.glob("./*.score"))

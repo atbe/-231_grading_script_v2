@@ -1,9 +1,5 @@
-import subprocess
 from Project import Project
-from subprocess import call
 
-# for testing purposes only.
-EDITOR="gedit"
 
 class Student:
 
@@ -43,26 +39,16 @@ class Student:
             print("{} output:".format(absolute_path))
             call(["python3", str(absolute_path)])
 
-    def print_project_info(self, project_number):
+    def print_project_info_and_check_score(self, project_number):
         print("Current Student: {}".format(self.netid))
         print("Current Project: {}".format(project_number))
-        print("Is Graded: {}".format(self.projects[project_number].is_graded))
+        is_graded = self.projects[project_number].is_graded
+        print("Is Graded: {}".format(is_graded))
+        if is_graded:
+            print("Current score: {}".format(self.projects[project_number].check_scoresheet()))
 
-    def open_files(self, project_number):
-        # TODO: Implement checking for when project does not exist
-        project = self.projects[project_number]
-        files_to_open = " ".join([path.name for path in project.all_file_paths])
 
-        print_project_info(project_number)
-        input("Press enter to open the files in {}.".format(EDITOR))
-        for path in project.all_file_paths:
-            # print("Project graded = ", project.is_graded)
-            print("Opening: ", str(path))
-
-            subprocess.Popen([EDITOR, str(path)], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-
-            # os.system("{} {} &".format(EDITOR, str(path)))
-        # input("Press enter to continue")
+    # def \ciopen_scoresheet(self, project_number):
 
     def __lt__(self, other_student):
         return self.netid < other_student.netid
