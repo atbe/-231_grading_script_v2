@@ -2,7 +2,6 @@
 
 from pathlib import Path
 import argparse
-from Section import Section
 from Student import Student
 from Students import Students
 from Tools import print_menu
