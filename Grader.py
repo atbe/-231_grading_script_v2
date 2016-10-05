@@ -6,7 +6,7 @@ from Student import Student
 from Students import Students
 from Tools import print_menu
 
-DEBUG = True
+DEBUG = False
 
 def printd(*says):
     if DEBUG:
@@ -38,7 +38,7 @@ section_path = handin_path / "Section{:03d}".format(section_number)
 students = Students()
 students.get_all_students_in_section(section_path)
 
-def main():
+def run_grader():
     grading_options = ["Grade all students in your Section", "Grade ungraded projects", "Grade one student"]
     option = "bangbang"
     while option != "x":
@@ -54,7 +54,3 @@ def main():
             except IndexError as e:
                 print(str(e))
     print("c ya later")
-
-# Support packaging, this is the programs entry point
-if __name__ == "__main__":
-    main()
