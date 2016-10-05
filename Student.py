@@ -1,4 +1,4 @@
-import os
+import subprocess
 from Project import Project
 from subprocess import call
 
@@ -10,8 +10,6 @@ class Student:
     def __init__(self, path):
         self.path = path
         self.netid = path.name
-        # Project paths is a list of Path objects to all projects
-        self.project_paths = self._populate_projects()
         # Projects is a dictionary mapping {Project Number -> Project Path}
         self.projects = self._populate_projects()
 
@@ -30,10 +28,10 @@ class Student:
         return projects
 
     def get_project(self, project_number):
-        if project_number not in [proj.number for proj in self.project_paths]:
+        if project_number not in self.projects:
             raise IndexError("{} has not submitted project {:02d}".format(self.netid, project_number))
         else:
-            return self.project_paths[project_number]
+            return self.projects[project_number]
 
     def run_project_py_file(self, project_number):
         project_path = self.get_project(project_number)
@@ -45,17 +43,25 @@ class Student:
             print("{} output:".format(absolute_path))
             call(["python3", str(absolute_path)])
 
+    def print_project_info(self, project_number):
+        print("Current Student: {}".format(self.netid))
+        print("Current Project: {}".format(project_number))
+        print("Is Graded: {}".format(self.projects[project_number].is_graded))
+
     def open_files(self, project_number):
         # TODO: Implement checking for when project does not exist
         project = self.projects[project_number]
         files_to_open = " ".join([path.name for path in project.all_file_paths])
 
-        print("Current Student: {}\nCurrent Project: {}\nIs Graded: {}".format(self.netid, project.number, project.is_graded))
+        print_project_info(project_number)
         input("Press enter to open the files in {}.".format(EDITOR))
         for path in project.all_file_paths:
             # print("Project graded = ", project.is_graded)
             print("Opening: ", str(path))
-            os.system("{} {} &".format(EDITOR, str(path)))
+
+            subprocess.Popen([EDITOR, str(path)], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+            # os.system("{} {} &".format(EDITOR, str(path)))
         # input("Press enter to continue")
 
     def __lt__(self, other_student):
