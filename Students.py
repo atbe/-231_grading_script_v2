@@ -28,31 +28,18 @@ class Students:
         else:
             return self.students[key]
 
-    def grade_all_students(self, project_number):
-        options = ["Open the files", "Move on to next student"]
-        for student in self.students:
-            os.system("clear")
-            student.print_project_info(project_number)
-            option = "ooblah"
-            # TODO: Add Pranshu score sheet checker and write .graded file if not already written
-            while (option != "x"):
-                option = print_menu(options, "Project Grading")
-                if option == "x":
-                    print("Returning to main menu.")
-                    return
-                elif option == "1":
-                    student.open_files(project_number)
-                elif option == "2":
-                    break
-        input("Finished grading all students. Press enter to return to the main menu")
-
-    def grade_ungraded_students(self, project_number):
-        options = ["Open the files", "Move on to next student"]
-        for student in self.students:
-            if student.get_project(project_number).is_graded:
+    def grade_all_students(self, project_number, skip_graded=False):
+        options = ["Open all the files", "Open the scoresheet", "Grade Previous Student", "Grade Next Student"]
+        current_student_index = 0
+        while current_student_index < len(self.students) - 1:
+            current_student_index += 1
+            # print(current_student_index)
+            student = self.students[current_student_index]
+            project = student.get_project(project_number)
+            if skip_graded and project.is_graded:
                 continue
             os.system("clear")
-            student.print_project_info(project_number)
+            student.print_project_info_and_check_score(project_number)
             option = "ooblah"
             while (option != "x"):
                 option = print_menu(options, "Project Grading")
@@ -60,8 +47,19 @@ class Students:
                     print("Returning to main menu.")
                     return
                 elif option == "1":
-                    student.open_files(project_number)
+                    project.open_files()
                 elif option == "2":
+                    project.open_scoresheet()
+                    project.check_scoresheet()
+                elif option == "3":
+                    if current_student_index == 0:
+                        print("You are on the first student!")
+                elif option == "4":
+                    current_student_index += 1
                     break
-        input("Finished grading all students. Press enter to return to the main menu")
+                else:
+                    current_student_index -= 1
+                    break
+
+        input("\nFinished grading all students. Press enter to return to the main menu.")
 
