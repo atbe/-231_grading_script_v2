@@ -99,8 +99,8 @@ class Students:
             elif option == "1":
                 project.open_files()
                 input("\nPress enter when you have finished grading.\n")
-                project.mark_as_graded()
                 project.check_scoresheet()
+                project.mark_as_graded()
             elif option == "2":
                 project.open_scoresheet()
                 input("\nPress enter when you have finished grading.\n")
@@ -139,8 +139,8 @@ class Students:
                 elif option == "1":
                     project.open_files()
                     input("\nPress enter when you have finished grading.\n")
-                    project.mark_as_graded()
                     project.check_scoresheet()
+                    project.mark_as_graded()
                 elif option == "2":
                     project.open_scoresheet()
                     input("\nPress enter when you have finished grading.\n")

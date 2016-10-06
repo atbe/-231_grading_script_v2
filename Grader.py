@@ -5,6 +5,7 @@ import argparse
 from Student import Student
 from Students import Students
 from Tools import print_menu
+import os
 
 DEBUG = False
 
@@ -39,6 +40,7 @@ students = Students()
 students.get_all_students_in_section(section_path)
 
 def run_grader():
+    os.system("clear")
     grading_options = ["Grade all students in your Section", "Grade ungraded projects", "Grade one student"]
     option = "bangbang"
     while option != "x":
