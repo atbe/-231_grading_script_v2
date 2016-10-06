@@ -6,6 +6,7 @@ from Student import Student
 from Students import Students
 from Tools import print_menu
 import os
+import sys
 
 DEBUG = False
 
@@ -14,6 +15,11 @@ def printd(*says):
         for saying in says:
             print(saying, " ", end="")
         print()
+
+# Check if we are even on the CSE Server
+if not Path("/user/cse231/Handin").exists() and not DEBUG:
+    print("You are not on the CSE server.\nUse -p option or run this program on the CSE server.")
+    sys.exit()
 
 parser = argparse.ArgumentParser(description="Help with lab 0 grading. poc.")
 parser.add_argument("section", help="Section to grade.", type=int)
