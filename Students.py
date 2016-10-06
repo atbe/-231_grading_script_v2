@@ -89,17 +89,21 @@ class Students:
         student = student_possible_matches[0]
         project = student.get_project(project_number)
         option="submarine"
-        os.system("clear")
-        student.print_project_info_and_check_score(project_number)
         while(option != "x"):
+            os.system("clear")
+            student.print_project_info_and_check_score(project_number)
             option = print_menu(options, "Project Grading")
             if option == "x":
                 print("Returning to main menu.")
                 return
             elif option == "1":
                 project.open_files()
+                input("\nPress enter when you have finished grading.\n")
+                project.mark_as_graded()
+                project.check_scoresheet()
             elif option == "2":
                 project.open_scoresheet()
+                input("\nPress enter when you have finished grading.\n")
                 project.check_scoresheet()
 
 
@@ -124,18 +128,22 @@ class Students:
             project = student.get_project(project_number)
             if skip_graded and project.is_graded:
                 continue
-            os.system("clear")
-            student.print_project_info_and_check_score(project_number)
             option = "ooblah"
             while (option != "x"):
+                os.system("clear")
+                student.print_project_info_and_check_score(project_number)
                 option = print_menu(options, "Project Grading")
                 if option == "x":
                     print("Returning to main menu.")
                     return
                 elif option == "1":
                     project.open_files()
+                    input("\nPress enter when you have finished grading.\n")
+                    project.mark_as_graded()
+                    project.check_scoresheet()
                 elif option == "2":
                     project.open_scoresheet()
+                    input("\nPress enter when you have finished grading.\n")
                     project.check_scoresheet()
                 elif option == "3":
                     if current_student_index == 0:

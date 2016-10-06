@@ -1,5 +1,6 @@
 import re
 import subprocess
+import getpass
 
 # for testing purposes only.
 EDITOR="gedit"
@@ -183,10 +184,31 @@ class Project:
 
         Returns
         -------
-        int
+        nt
             Total number of points awarded to student.
         """
         score_total, points_list = self.get_project_total_score()
+        fix_choice = "wut"
+        if score_total != points_list[0] and (points_list[0] != 0):
+            while fix_choice not in "yes no":
+                fix_choice = input("The score and sum do not match.\nGiven Score: {}\nComputed Score: {}\nWould you like me to fix that? (Yes/No): ".format(points_list[0], score_total)).lower().strip()
+            if fix_choice == "yes":
+                self.write_project_score(score_total, points_list)
+            else:
+                return score_total
+        else:
+            self.write_project_score(score_total, points_list)
+
         # print("Calculated score: {:02d}".format(score_total))
-        self.write_project_score(score_total, points_list)
         return score_total
+
+
+    def mark_as_graded(self):
+        """
+        Mark the project as graded by writing a .graded file
+        """
+        ta_username = getpass.getuser()
+        print("Graded by", ta_username)
+        with open("{}/.graded".format(str(self.project_path.resolve())), "w") as scoresheet:
+            scoresheet.write(ta_username)
+            self.is_graded = True
