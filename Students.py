@@ -148,11 +148,11 @@ class Students:
                 elif option == "3":
                     if current_student_index == 0:
                         print("You are on the first student!")
+                    else:
+                        current_student_index -= 1
+                        break
                 elif option == "4":
                     current_student_index += 1
-                    break
-                else:
-                    current_student_index -= 1
                     break
 
         input("\nFinished grading all students. Press enter to return to the main menu.")
