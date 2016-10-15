@@ -121,10 +121,10 @@ class Students:
         """
         options = ["Open all the files", "Open the scoresheet", "Grade Previous Student", "Grade Next Student"]
         current_student_index = 0
-        while current_student_index < len(self.students) - 1:
-            current_student_index += 1
+        while current_student_index < len(self.students):
             # print(current_student_index)
             student = self.students[current_student_index]
+            current_student_index += 1
             project = student.get_project(project_number)
             if skip_graded and project.is_graded:
                 continue
