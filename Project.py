@@ -184,7 +184,7 @@ class Project:
 
         Returns
         -------
-        nt
+        int
             Total number of points awarded to student.
         """
         score_total, points_list = self.get_project_total_score()
