@@ -195,12 +195,12 @@ class Project:
             if fix_choice == "yes":
                 self.write_project_score(score_total, points_list)
             else:
-                return score_total
+                return points_list[0] # The point total at the top of the file
         else:
             self.write_project_score(score_total, points_list)
 
         # print("Calculated score: {:02d}".format(score_total))
-        return score_total
+        return points_list[0]
 
 
     def mark_as_graded(self):
