@@ -113,7 +113,7 @@ class Student:
         is_graded = self.projects[project_number].is_graded
         print("Is Graded: {}".format(is_graded))
         if is_graded:
-            print("Current score: {}".format(self.projects[project_number].check_scoresheet()))
+            print("Current score: {}".format(self.projects[project_number].get_project_total_score()[1][0]))
 
     def __lt__(self, other_student):
         """
