@@ -51,8 +51,10 @@ class Project:
             List of paths of all the .py files in the project directory
         """
         py_paths = []
+        pattern = r"^[^\.]\w+\.py"
         for path in self.project_path.iterdir():
-            if ".py" in path.name:
+            match = re.search(pattern, path.name)
+            if match:
                 # print(path.name)
                 py_paths.append(path)
 
