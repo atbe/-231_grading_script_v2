@@ -191,7 +191,7 @@ class Project:
         """
         score_total, points_list = self.get_project_total_score()
         fix_choice = "wut"
-        if score_total != points_list[0] and (points_list[0] != 0):
+        if score_total != points_list[0] and (score_total != 0):
             while fix_choice not in "yes no":
                 fix_choice = input("\nThe score and sum do not match.\nGiven Score: {}\nComputed Score: {}\nWould you like me to fix that? (Yes/No): ".format(points_list[0], score_total)).lower().strip()
             if fix_choice == "yes":
