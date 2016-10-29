@@ -80,14 +80,17 @@ class Students:
         Raises
         ------
         IndexError
-            Student is not found.
+            Student is not found or project is not found.
         """
         options = ["Open all the files", "Open the scoresheet"]
         student_possible_matches = [student for student in self.students if student.netid == netid]
         if len(student_possible_matches) != 1:
             raise IndexError("Student not found!")
         student = student_possible_matches[0]
-        project = student.get_project(project_number)
+        try:
+            project = student.get_project(project_number)
+        except IndexError as e:
+            raise e
         option="submarine"
         while(option != "x"):
             os.system("clear")
@@ -124,7 +127,13 @@ class Students:
         while current_student_index < len(self.students):
             # print(current_student_index)
             student = self.students[current_student_index]
-            project = student.get_project(project_number)
+            try:
+                project = student.get_project(project_number)
+            except IndexError as e:
+                print(e)
+                input("Press enter to continue.")
+                current_student_index += -1 if option == "3" else 1
+                continue
             if skip_graded and project.is_graded:
                 current_student_index += 1
                 continue
