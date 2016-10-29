@@ -124,9 +124,9 @@ class Students:
         while current_student_index < len(self.students):
             # print(current_student_index)
             student = self.students[current_student_index]
-            current_student_index += 1
             project = student.get_project(project_number)
             if skip_graded and project.is_graded:
+                current_student_index += 1
                 continue
             option = "ooblah"
             while (option != "x"):
