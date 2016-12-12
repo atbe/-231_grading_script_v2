@@ -42,7 +42,12 @@ class Students:
         for student_path in section_path.iterdir():
             if student_path.is_dir():
                 # print(student_path.name)
-                self.students.append(Student(student_path))
+                try:
+                    self.students.append(Student(student_path))
+                except Exception as e:
+                    print("Could not add student", student_path.name, "\nError:", e)
+                    input('Press enter to continue')
+                    continue
         self.students.sort()
 
     def __iter__(self):

@@ -1,9 +1,7 @@
 import re
 import subprocess
 import getpass
-
-# for testing purposes only.
-EDITOR="gedit"
+import Grader
 
 class Project:
     """
@@ -71,7 +69,7 @@ class Project:
         """
         files = []
         for path in self.project_path.iterdir():
-            if path.is_file() and path.name != ".graded":
+            if path.is_file() and path.name != ".graded" and path.suffix[1:] in "output score py":
                 # print("Adding {} to project files.".format(path.name))
                 files.append(path)
         return files
@@ -92,7 +90,7 @@ class Project:
         """
         Opens the scoresheet using EDITOR in a subprocess.
         """
-        subprocess.Popen([EDITOR, str(self.scoresheet_path)], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        subprocess.Popen([Grader.EDITOR, str(self.scoresheet_path)], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
     def open_files(self):
         """
@@ -100,12 +98,12 @@ class Project:
         """
         # TODO: Implement checking for when project does not exist
 
-        input("Press enter to open the files in {}.".format(EDITOR))
+        input("Press enter to open the files in {}.".format(Grader.EDITOR))
         for path in self.all_file_paths:
             # print("Project graded = ", project.is_graded)
             print("Opening: ", str(path))
 
-            subprocess.Popen([EDITOR, str(path)], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+            subprocess.Popen([Grader.EDITOR, str(path)], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
     def get_scoresheet(self):
         """
@@ -125,6 +123,26 @@ class Project:
         score_file_path = score_file_paths[0]
 
         return score_file_path
+
+    def get_percent_score(self):
+        with open(str(self.scoresheet_path), "r") as file_object_read:
+                lines = file_object_read.read()
+
+                # only want the first line
+                lines = lines[0:lines.find('\n')]
+
+                # grab the desired digits
+                earned_points = (re.findall(r'_+\d+_+', lines))
+                total_points = (re.findall(r'(?!\/\s)\d+\s+$', lines))
+                # print(total_points)
+                # print(earned_points)
+                # input("Press enter to continue...")
+
+                earned_points = float(earned_points[0].strip('_'))
+                total_points = float(total_points[0].strip())
+
+                return earned_points/total_points
+
 
     def get_project_total_score(self):
         """
