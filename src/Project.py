@@ -125,21 +125,40 @@ class Project:
         return score_file_path
 
     def get_percent_score(self):
+        """
+        Gets the percentage score of a students project.
+        """
+        if self.scoresheet_path == None:
+            raise IndexError('Student does not have a scoresheet.')
         with open(str(self.scoresheet_path), "r") as file_object_read:
-                lines = file_object_read.read()
+                lines_raw = file_object_read.read()
 
-                # only want the first line
-                lines = lines[0:lines.find('\n')]
+                '''
+                Some of the score sheets made the score on a second line.
+                This block handles finding the correct line indicated by
+                containing the keyword "Sec". Hackish, but it works.
+                '''
+                lines = ''
+                line_number = 0
+                while 'Sec' not in lines:
+                    lines = lines_raw[line_number:lines_raw.find('\n')]
+                    line_number += 1
 
                 # grab the desired digits
                 earned_points = (re.findall(r'_+\d+_+', lines))
-                total_points = (re.findall(r'(?!\/\s)\d+\s+$', lines))
+                total_points = (re.findall(r'(?!_+\s+\/\s)\d+\s*$', lines))
                 # print(total_points)
                 # print(earned_points)
                 # input("Press enter to continue...")
 
-                earned_points = float(earned_points[0].strip('_'))
-                total_points = float(total_points[0].strip())
+                try:
+                    earned_points = float(earned_points[0].strip('_'))
+                    total_points = float(total_points[0].strip())
+                except Exception as e:
+                    print('Error when parsing score:', e)
+                    print(str(self.project_path))
+                    print(lines)
+                    input('Press enter to continue')
 
                 return earned_points/total_points
 

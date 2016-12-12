@@ -11,6 +11,7 @@ import pickle
 import time
 import pprint
 import operator
+import traceback
 
 DEBUG = True
 
@@ -62,12 +63,12 @@ def collect_averages(project_numbers, section_numbers):
         # Create Section object
         section_path = handin_path / "Section{:03d}".format(section_number)
 
+        # Create a students object and populate it with students
+        students = Students()
+        students.get_all_students_in_section(section_path)
+
         # just for kicks
         for project_number in project_numbers:
-            # Create a students object and populate it with students
-            students = Students()
-            students.get_all_students_in_section(section_path)
-
             # grab the project average for this section
             section_result = []
             for student in students:
@@ -75,26 +76,32 @@ def collect_averages(project_numbers, section_numbers):
                     try:
                         project_total = student.get_project(project_number).get_percent_score()
                         section_result.append(project_total)
+                    except IndexError as e:
+                        print(e)
+                        continue
                     except Exception as e:
-                        print('Some exception was encountered.\nStudent: ', student.netid,
-                                '\nError:', e)
+                        print('Some exception was encountered.\nStudent: ', student.netid, ' Section:', section_number,
+                                'Project: ', project_number, '\nError:', e)
+                        print(traceback.format_exc())
                         input('Press enter to continue')
-                        section_result.append(0)
                         continue
                 else:
                     # assuming a no show is a 0
                     section_result.append(None)
-            if section_number not in section_to_projects_dict:
-                section_to_projects_dict[section_number] = []
 
             # filter out only the students who did submit a project
             project_scores_submitted = [score for score in section_result if score is not None]
             count_no_submission = len([score for score in section_result if score is None])
             project_avg = float( sum(project_scores_submitted) / len(project_scores_submitted) )
+
+            # insert the project result into the dict
+            if section_number not in section_to_projects_dict:
+                section_to_projects_dict[section_number] = []
             section_to_projects_dict[section_number].append((project_number, project_avg))
 
             # output the results for students who did not submit
-            print('Section:', section_number, 'Project:', project_number, 'Did not submit:', count_no_submission)
+            if count_no_submission:
+                print('Section:', section_number, 'Project:', project_number, 'Did not submit:', count_no_submission)
     # print(section_to_projects_dict)
     return section_to_projects_dict
 
@@ -166,6 +173,37 @@ def collect_averages_menu():
     save_results(averages)
     return averages
 
+def process_averages_menu(results):
+    pprint.pprint(results)
+    '''
+    # find the worst project for each section
+    lowest_project_scores = []
+    for section_number in results:
+        # -1 because of project 0
+        worst_project = min(results[section_number][1:], key=operator.itemgetter(1))
+
+        # group the project as a tuple of section, project, score
+        worst_project = (section_number, worst_project[0], worst_project[1])
+        lowest_project_scores.append(worst_project)
+
+    # sort based on project
+    lowest_project_scores.sort(key=operator.itemgetter(1))
+    for section, project, score in lowest_project_scores:
+        print('Section:', section, ' Project: ', project, ' Average:'" = ", score * 100.0)
+
+    # grab the average of all projects for each section
+    section_all_projects_average_dict = {}
+    for section_number in results:
+        results[section_number].sort(key=operator.itemgetter(1), reverse=True)
+        project_sum = sum([project_result[1] * 100 for project_result in results[section_number]])
+        section_all_projects_average_dict[section_number] = project_sum / len(results[section_number])
+    # pprint.pprint(results)
+    # pprint.pprint(section_all_projects_average_dict)
+    sorted_average_results = sorted(list(section_all_projects_average_dict.items()), key=operator.itemgetter(1), reverse=True)
+    for r in sorted_average_results:
+        print(r)
+    '''
+
 
 def average_collector_menu():
     """
@@ -185,8 +223,9 @@ def average_collector_menu():
         elif option == "2":
             file_name= input('What is the name of the pickle file?: ')
             try:
-                averages = open_results
+                averages = open_results(file_name)
                 process_averages_menu(averages)
+                break
             except FileNotFoundError:
                 print('Could not find', file_name, 'Please try again.')
                 continue
@@ -226,34 +265,4 @@ def main():
     # while option.lower().strip() not in 'y n':
         # option = input('Would you like to store the results? (Y/n): ')
     # if option == 'y':
-
-    results = open_results('results1481517992.pickle')
-    # sort
-
-    # find the worst project for each section
-    lowest_project_scores = []
-    for section_number in results:
-        # -1 because of project 0
-        worst_project = min(results[section_number][1:], key=operator.itemgetter(1))
-
-        # group the project as a tuple of section, project, score
-        worst_project = (section_number, worst_project[0], worst_project[1])
-        lowest_project_scores.append(worst_project)
-
-    # sort based on project
-    lowest_project_scores.sort(key=operator.itemgetter(1))
-    for section, project, score in lowest_project_scores:
-        print('Section:', section, ' Project: ', project, ' Average:'" = ", score * 100.0)
-
-    # grab the average of all projects for each section
-    section_all_projects_average_dict = {}
-    for section_number in results:
-        results[section_number].sort(key=operator.itemgetter(1), reverse=True)
-        project_sum = sum([project_result[1] * 100 for project_result in results[section_number]])
-        section_all_projects_average_dict[section_number] = project_sum / len(results[section_number])
-    # pprint.pprint(results)
-    # pprint.pprint(section_all_projects_average_dict)
-    sorted_average_results = sorted(list(section_all_projects_average_dict.items()), key=operator.itemgetter(1), reverse=True)
-    for r in sorted_average_results:
-        print(r)
 
