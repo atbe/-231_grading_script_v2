@@ -37,7 +37,11 @@ class Student:
         bool
             True if the project file exists.
         """
-        return (self.path / "{:02d}".format(project_number)).exists()
+
+        if project_number not in self.projects:
+            return False
+        else:
+            return self.projects[project_number].get_percent_score() > 0.1
 
     def _populate_projects(self):
         """
